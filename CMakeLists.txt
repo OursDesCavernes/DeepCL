@@ -16,6 +16,7 @@ endif()
 #OPTION(BUILD_PYTHON_WRAPPERS "Build Python wrappers.  Needs Python." ON)
 OPTION(BUILD_JPEG_SUPPORT "Allows native loading of jpegs, via manifest file." ON)
 OPTION(BUILD_INTERNAL_LUA "If using from Lua, set to 'OFF'" ON)
+OPTION(BUILD_SHM "Build predictshm" OFF)
 OPTION(MAINTAINER_OPTIONS "Show maintainer options" OFF)
 
 if(MAINTAINER_OPTIONS)
@@ -202,13 +203,14 @@ endif(LIBJPEG_AVAILABLE)
 
 add_executable(deepcl_train src/main/train.cpp src/util/stringhelper.cpp)
 add_executable(deepcl_predict src/main/predict.cpp src/util/stringhelper.cpp)
+add_executable(deepcl_predictshm src/main/predictshm.cpp src/util/stringhelper.cpp)
 
 add_executable(cifar-to-mat test/CifarToMat.cpp src/util/stringhelper.cpp test/CifarLoader.cpp)
 add_executable(prepare-norb test/prepare-norb.cpp src/util/stringhelper.cpp)
 add_executable(mnist-to-floats test/mnist-to-floats.cpp src/util/stringhelper.cpp)
 add_executable(mnist-to-pipe test/mnist-to-pipe.cpp src/util/stringhelper.cpp)
 
-foreach(exe deepcl_train deepcl_predict cifar-to-mat prepare-norb mnist-to-floats mnist-to-pipe)
+foreach(exe deepcl_train deepcl_predict deepcl_predictshm cifar-to-mat prepare-norb mnist-to-floats mnist-to-pipe)
     target_link_libraries(${exe} DeepCL)
 endforeach()
 
@@ -264,7 +266,7 @@ INSTALL(DIRECTORY src/ DESTINATION include/deepcl FILES_MATCHING PATTERN *.h)
 INSTALL(PROGRAMS src/activate.sh DESTINATION bin)
 INSTALL(PROGRAMS src/activate.bat DESTINATION bin)
 #INSTALL(DIRECTORY EasyCL/ DESTINATION include/easycl FILES_MATCHING PATTERN *.h)
-INSTALL(TARGETS DeepCL deepcl_train deepcl_predict deepcl_unittests deepcl_gtest mnist-to-floats
+INSTALL(TARGETS DeepCL deepcl_train deepcl_predict deepcl_predictshm deepcl_unittests deepcl_gtest mnist-to-floats
         mnist-to-pipe cifar-to-mat
     EXPORT DeepCLTargets
     RUNTIME DESTINATION bin
